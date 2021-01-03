@@ -1,42 +1,8 @@
 import httpClient from '@/plugins/axios';
 
-/**
- * Protocol: 0002 - API to pre-register a new user
- */
-const createUserPreRegister = async (user) => {
-  return httpClient.post('/user', {
-    usuario: {
-      login: user.email,
-      password: user.password,
-    },
-    pessoa: {
-      naturalidade: 1,
-      nome: user.name,
-      nomeMae: '',
-      dataNascimento: user.birthdate,
-      sexo: user.gender,
-      cpf: user.cpf,
-      email: user.email,
-      telefone1: user.telephone,
-      telefone2: '',
-    },
-    profissional: {
-      idconselho_profissional: user.professionalCouncil.idconselho_profissional,
-      numero_conselho: user.professionalCouncilNumber,
-      matricula: user.hospitalRegistration,
-    },
-    empresa: {
-      idEmpresa: user.hospitalId,
-    },
-    profissional_ocupacao: {
-      idOcupacao: user.professionalOccupationId,
-    },
-  });
+const createUser = async (user) => {
+  return httpClient.post('/visitanteexterno/', user);
 };
-
-/**
- * Protocol: 0010 - API to request a email to recover password
- */
 
 const sendRecoverPasswordEmail = async (email) => {
   return httpClient.get('/user-password/?', {
@@ -47,16 +13,10 @@ const sendRecoverPasswordEmail = async (email) => {
   });
 };
 
-/**
- * Protocol: 0015 - API to list users by status
- */
 const listUsersByStatus = async () => {
   return httpClient.get(`/list-all-users-in-all-status`);
 };
 
-/**
- * Protocol: 0016 - API to update user status
- */
 const updateUserStatus = async (user) => {
   console.log(user);
   return httpClient.post('/companies-users', {
@@ -83,8 +43,14 @@ const unblockUserStatus = async (user) => {
   return httpClient.put(`/companies-users/unblock?idUsuario=${user.idusuario}`);
 };
 
+const authenticateUser = async (user) => {
+  console.log(user);
+  return httpClient.post(`/visitanteexterno/login`, user);
+};
+
 export {
-  createUserPreRegister,
+  authenticateUser,
+  createUser,
   listUsersByStatus,
   updateUserStatus,
   rejectUserStatus,

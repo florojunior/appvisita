@@ -1,8 +1,8 @@
 import {
-  createUserPreRegister,
+  createUser,
   sendRecoverPasswordEmail,
+  authenticateUser
 } from '@/services/api/user.js';
-import { checkPersonRegisterExistsByCpf } from '@/services/api/person';
 import { getAllHospitals } from '@/services/api/companies';
 import { getAllProfessionalCouncils } from '@/services/api/professionalCouncils';
 import { getAllOccupations } from '@/services/api/occupations';
@@ -59,33 +59,47 @@ export const actions = {
       );
     }
   },
-  async fetchPersonRegister(state, cpf) {
+  async fetchPersonRegister(state, user) {
     try {
-      const userExists = await checkPersonRegisterExistsByCpf(cpf);
+      await createUser(user);
 
-      if (userExists) {
-        state.dispatch(
-          'modal/showModal',
-          {
-            title: 'A conta de usuário já existe',
-            message:
-              'Detectamos que uma conta já está cadastrada com o CPF informado.',
-            buttonText: 'VOLTAR PARA LOGIN',
-          },
-          {
-            root: true,
-          }
-        );
-      } else {
-        state.commit('setCpfPreRegistration', cpf);
-        await state.dispatch('loadUserPreRegistrationForm');
-      }
+      state.dispatch(
+        'modal/showModal',
+        {
+          title: 'Cadastro realizado',
+          message:
+            'Seus dados foram submetidos e agora está pendente de aprovação pela gestão do hospital. \nAguarde e-mail de confirmação para ter acesso ao sistema.',
+          buttonText: 'VOLTAR PARA O LOGIN',
+        },
+        {
+          root: true,
+        }
+      );
     } catch (error) {
       state.dispatch(
         'modal/showModal',
         {
           title: 'Erro ao processar a requisição!',
           message: 'Se o problema persistir, favor contatar o suporte.',
+          buttonText: 'VOLTAR PARA LOGIN',
+        },
+        {
+          root: true,
+        }
+      );
+    }
+  },
+  async authenticate(state, user) {
+    try {
+      const result = await authenticateUser(user);
+      localStorage.setItem('token_blood', result.data.data.token);
+      router.push({ name: 'visitForm' }, {});
+    } catch (error) {
+      state.dispatch(
+        'modal/showModal',
+        {
+          title: 'Erro ao autenticar!',
+          message: 'Usuario ou senha inválidos!',
           buttonText: 'VOLTAR PARA LOGIN',
         },
         {

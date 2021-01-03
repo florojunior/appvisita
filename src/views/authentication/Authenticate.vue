@@ -16,11 +16,13 @@
           <v-card-text class="pb-0">
             <v-form id="form-authenticate" ref="form">
               <v-text-field
-                v-model="email"
-                name="email"
-                :rules="[emailRules.required, emailRules.validEmail]"
-                :label="`${formLabels.email}`"
+                v-model="cpf"
+                v-mask="'###.###.###.##'"
                 outlined
+                dense
+                name="cpf"
+                :label="`${formLabels.cpf}`"
+                :rules="[cpfRules.required, cpfRules.validCpf]"
               ></v-text-field>
               <v-text-field
                 v-model="password"
@@ -85,7 +87,8 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-import { emailRules, passwordRules } from '@/validations';
+import { cpfRules, passwordRules } from '@/validations';
+import unmaskText from '@/utils/unmaskText';
 
 import Logo from '@/components/template/Logo.vue';
 
@@ -100,7 +103,7 @@ export default {
         subtitle: 'Acesse sua conta com e-mail e senha.',
       },
       formLabels: {
-        email: 'E-mail',
+        cpf: 'CPF',
         password: 'Senha',
       },
       button: {
@@ -113,17 +116,21 @@ export default {
         text: 'Criar uma conta',
       },
       email: '',
-      password: '',
-      emailRules,
+      cpf: '',
       passwordRules,
+      cpfRules,
       showPassword: false,
     };
   },
   computed: {
     ...mapGetters('main', ['authenticated']),
+    unmaskedCpf() {
+      return unmaskText(this.cpf);
+    },
   },
   methods: {
     ...mapActions('authentication', [
+      'authenticate',
       'setIsForgotPassword',
       'setMode',
       'setSelectedHospital',
@@ -135,17 +142,9 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           this.buttonLoading = true;
-          const result = await this.$http.post('/login', {
-            login: this.email,
-            password: this.password,
-          });
-          localStorage.setItem('token_blood', result.data.result.token);
-          this.setHospitelUser(result.data.result.companyAccess);
-          this.$router.push({ name: 'chooseUnidade' }, {});
-          this.showModal({
-            title: this.modal.success.title,
-            message: this.modal.success.message,
-            button_text: this.modal.success.button_text,
+          await this.authenticate({
+            cpf: this.unmaskedCpf,
+            senha: this.password,
           });
         } catch (error) {
           this.showModal({

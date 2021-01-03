@@ -40,6 +40,16 @@
                   :label="`${formLabels.email}`"
                   outlined
                 ></v-text-field>
+                <v-text-field
+                  v-model="password"
+                  name="password"
+                  dense
+                  password
+                  type="password"
+                  :rules="[passwordRules.required, passwordRules.validEmail]"
+                  :label="`${formLabels.password}`"
+                  outlined
+                ></v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions class="d-flex justify-center pl-4 pr-4">
@@ -82,6 +92,7 @@ import {
   cpfRules,
   emailRules,
   nameRules,
+  passwordRules
   } from '@/validations';
 import recaptcha from '@/mixins/recaptcha.js';
 import unmaskText from '@/utils/unmaskText';
@@ -102,7 +113,8 @@ export default {
       formLabels: {
         cpf: 'CPF',
         name: 'Nome',
-        email: 'Email'
+        email: 'Email',
+        password: 'Senha' 
       },
       button: {
         text: 'Continuar',
@@ -115,9 +127,11 @@ export default {
       cpf: '',
       name:'',
       email:'',
+      password: '',
       cpfRules,
       emailRules,
-      nameRules
+      nameRules,
+      passwordRules
     };
   },
   computed: {
@@ -134,9 +148,8 @@ export default {
       if (this.$refs.form.validate()) {
         this.startButtonLoading();
         try {
-          await this.fetchPersonRegister(this.unmaskedCpf);
+          await this.fetchPersonRegister({cpf: this.cpf, nome: this.name, email: this.email, senha: this.password});
         } catch (error) {
-          this.resetRecaptcha();
         }
 
         this.stopButtonLoading();

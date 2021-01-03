@@ -4,8 +4,8 @@
     style="height: calc(100vh)"
   >
     <!-- :class="{ hideMenu: authenticated }" -->
-    <!--<Menu v-if="authenticated"></Menu> -->
-    <Menu/>
+    <Menu v-if="authenticated"></Menu>
+    <!--<Menu/>-->
     <!--<div class="default-header-detail primary-background-color" style="height: 64px; width: 100%; position: absolute">
               <p class="white--text text-left pt-4 ml-16">Usuários</p>
           </div>-->
