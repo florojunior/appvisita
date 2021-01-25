@@ -14,7 +14,7 @@ Vue.use({
 
 httpClient.interceptors.request.use(
   function (config) {
-    config.headers['Authorization'] = `Bearer ${localStorage.getItem('token_blood')}`;
+    config.headers['Authorization'] = `${localStorage.getItem('token_visitas')}`;
 
     return config;
   },
@@ -34,7 +34,7 @@ httpClient.interceptors.response.use(
   },
   (error) => {
     if (error.request.status === 401) {
-      localStorage.setItem('token_blood', null);
+      localStorage.setItem('token_visitas', null);
       router.push({ name: 'login' }, {});
     }
     if (error.request.status === 500) {
@@ -42,7 +42,7 @@ httpClient.interceptors.response.use(
     }
 
     if (error.request.status === 400) {
-      localStorage.setItem('token_blood', null);
+      localStorage.setItem('token_visitas', null);
       router.push({ name: 'login' }, {});
     }
     return Promise.reject(error);

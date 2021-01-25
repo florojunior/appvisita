@@ -13,7 +13,7 @@ export default {
     isLogged: false,
   }),
   created: function () {
-    this.isLogged = localStorage.getItem('token_blood') !== 'null';
+    this.isLogged = localStorage.getItem('token_visitas') !== 'null';
   },
 };
 </script>

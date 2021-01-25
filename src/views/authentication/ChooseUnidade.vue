@@ -46,7 +46,7 @@ export default {
             const result = await this.$http.get(`/profile-user/?idEmpresa=${hospital.idempresa}`);
             const menu  = result.data.result.menuPrimario;
             const newToken = result.data.token;
-            localStorage.setItem('token_blood', newToken);
+            localStorage.setItem('token_visitas', newToken);
             this.setAuthenticated(true);
             this.setMenu(menu);
             this.$router.push({ name: 'pendingUsers' }, {});

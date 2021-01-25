@@ -3,9 +3,10 @@ import {
   sendRecoverPasswordEmail,
   authenticateUser
 } from '@/services/api/user.js';
-import { getAllHospitals } from '@/services/api/companies';
-import { getAllProfessionalCouncils } from '@/services/api/professionalCouncils';
-import { getAllOccupations } from '@/services/api/occupations';
+import {
+  getAllVisitas, 
+  createVisita
+} from '@/services/api/visitas.js';
 
 import router from '@/router';
 
@@ -26,7 +27,7 @@ export const actions = {
     state.commit('setMode', payload);
   },
   handleLogOut() {
-    localStorage.setItem('token_blood', null);
+    localStorage.setItem('token_visitas', null);
     localStorage.setItem('perfil', null);
     router.push({ name: 'login' }, {});
   },
@@ -59,9 +60,46 @@ export const actions = {
       );
     }
   },
-  async fetchPersonRegister(state, user) {
+  async fetchPersonRegister(state, data) {
     try {
-      await createUser(user);
+
+      const formData = new FormData();
+      
+      formData.set("visitanteExternaDto", JSON.stringify(data.user));
+      //formData.append("visitanteExternaDto", JSON.stringify(data.user));
+      formData.append("file", data.foto);
+      await createUser(formData);
+
+      state.dispatch(
+        'modal/showModal',
+        {
+          title: 'Cadastro realizado',
+          message:
+            'Seus dados foram submetidos e agora está pendente de aprovação pela gestão do hospital. \nAguarde e-mail de confirmação para ter acesso ao sistema.',
+          buttonText: 'VOLTAR PARA O LOGIN',
+        },
+        {
+          root: true,
+        }
+      );
+    } catch (error) {
+      state.dispatch(
+        'modal/showModal',
+        {
+          title: 'Erro ao processar a requisição!',
+          message: 'Se o problema persistir, favor contatar o suporte.',
+          buttonText: 'VOLTAR PARA LOGIN',
+        },
+        {
+          root: true,
+        }
+      );
+    }
+  },
+  async fetchVisitaRegister(state, data) {
+    try {
+
+      await createVisita(data);
 
       state.dispatch(
         'modal/showModal',
@@ -92,8 +130,8 @@ export const actions = {
   async authenticate(state, user) {
     try {
       const result = await authenticateUser(user);
-      localStorage.setItem('token_blood', result.data.data.token);
-      router.push({ name: 'visitForm' }, {});
+      localStorage.setItem('token_visitas', result.data.data.token);
+      //router.push({ name: 'visitForm' }, {});
     } catch (error) {
       state.dispatch(
         'modal/showModal',

@@ -129,6 +129,7 @@ export default {
   },
   methods: {
     ...mapActions('authentication', ['handleLogOut']),
+    ...mapActions('main', ['handleLogOut']),
   },
 };
 </script>

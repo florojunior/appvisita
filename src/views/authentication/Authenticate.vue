@@ -89,6 +89,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 import { cpfRules, passwordRules } from '@/validations';
 import unmaskText from '@/utils/unmaskText';
+import router from '@/router';
 
 import Logo from '@/components/template/Logo.vue';
 
@@ -134,9 +135,10 @@ export default {
       'setIsForgotPassword',
       'setMode',
       'setSelectedHospital',
-      'setHospitelUser',
+      'setHospitelUser'
     ]),
     ...mapActions('modal', ['showModal']),
+    ...mapActions('main', ['setAuthenticated']),
     // "Mock" substituir pelo metodo para envio de email
     async submitForm() {
       if (this.$refs.form.validate()) {
@@ -146,6 +148,8 @@ export default {
             cpf: this.unmaskedCpf,
             senha: this.password,
           });
+          this.setAuthenticated(true);
+          router.push({ name: 'visitForm' }, {});
         } catch (error) {
           this.showModal({
             title: this.modal.error.title,

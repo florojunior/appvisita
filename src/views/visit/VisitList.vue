@@ -44,7 +44,7 @@ export default {
     ...mapGetters('main', ['authenticated']),
   },
   created() {
-    localStorage.setItem('token_blood', null);
+    localStorage.setItem('token_visitas', null);
     this.setAuthenticated(false);
     this.loadModeNewPassword();
   },
@@ -61,7 +61,7 @@ export default {
       this.$http.post('/authenticate/operador', user).then(
         (res) => {
           this.isLoading = false;
-          localStorage.setItem('token_blood', res.data.data.token);
+          localStorage.setItem('token_visitas', res.data.data.token);
           localStorage.setItem(
             'usuario_blood',
             JSON.stringify(res.data.data.payload)

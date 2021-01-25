@@ -1,7 +1,11 @@
 import httpClient from '@/plugins/axios';
 
 const createUser = async (user) => {
-  return httpClient.post('/visitanteexterno/', user);
+  return httpClient.post('/visitanteexterno/', user,{
+    headers: {
+    "Content-Type": `multipart/form-data; boundary=${user._boundary}`,
+    }
+  });
 };
 
 const sendRecoverPasswordEmail = async (email) => {

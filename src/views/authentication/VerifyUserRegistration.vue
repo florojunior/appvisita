@@ -40,6 +40,18 @@
                   :label="`${formLabels.email}`"
                   outlined
                 ></v-text-field>
+                <template>
+                  <v-file-input
+                    dense
+                    append-icon="mdi-camera"
+                    :prepend-icon="null"
+                    v-model="foto"
+                    outlined
+                    accept="image/*"
+                    :label="`${formLabels.foto}`"
+                  ></v-file-input>
+                  {{foto}}
+                </template>
                 <v-text-field
                   v-model="password"
                   name="password"
@@ -114,7 +126,8 @@ export default {
         cpf: 'CPF',
         name: 'Nome',
         email: 'Email',
-        password: 'Senha' 
+        password: 'Senha',
+        foto: 'Foto'
       },
       button: {
         text: 'Continuar',
@@ -128,6 +141,7 @@ export default {
       name:'',
       email:'',
       password: '',
+      foto: null,
       cpfRules,
       emailRules,
       nameRules,
@@ -145,10 +159,11 @@ export default {
       'fetchPersonRegister',
     ]),
     async submitForm() {
+      console.log(this.$refs.form.validate());
       if (this.$refs.form.validate()) {
         this.startButtonLoading();
         try {
-          await this.fetchPersonRegister({cpf: this.cpf, nome: this.name, email: this.email, senha: this.password});
+          await this.fetchPersonRegister( {user :{cpf: this.cpf, nome: this.name, email: this.email, senha: this.password}, foto: this.foto});
         } catch (error) {
         }
 
