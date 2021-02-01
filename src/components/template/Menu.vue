@@ -1,6 +1,12 @@
 <template>
   <nav>
     <v-navigation-drawer v-model="drawer" disable-resize-watcher app>
+      <v-row>
+        <v-col cols=12 class="d-flex justify-center mt-4">
+          <v-img src="@/assets/images/tjam_logo.svg" max-width="100" max-height="100"></v-img>
+        </v-col>
+      </v-row>
+      
       <v-list dense>
         <v-list-group v-for="itemMenu in menu" :key="itemMenu.descricao">
           <template v-slot:activator>
@@ -32,7 +38,7 @@
     <v-app-bar
       app
       flat
-      color="primary darken-2"
+      color="primary lighten-1"
     >
         <v-app-bar-nav-icon
           class="onPrimaryHighEmphasis--text"

@@ -24,6 +24,21 @@ const router = new Router({
         ),
     },
     {
+      path: '/listvisita',
+      name: 'visitList',
+      component: () =>
+        import(
+          /* webpackChunkName: "login" */ '@/views/visit/VisitList.vue'
+        ),
+    },{
+      path: '/formvisit',
+      name: 'visitForm',
+      component: () =>
+        import(
+          /* webpackChunkName: "login" */ '@/views/visit/VisitForm.vue'
+        ),
+    },
+    {
       path: '/login',
       name: 'login',
       component: () =>

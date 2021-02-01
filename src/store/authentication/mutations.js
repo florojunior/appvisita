@@ -34,4 +34,7 @@ export const mutations = {
   setMenu(state, payload) {
     state.menu = payload;
   },
+  setListVisitas(state, payload) {
+    state.listVisitas = payload;
+  },
 };

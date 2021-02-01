@@ -2,11 +2,30 @@
   <v-content>
     <v-container fill-height class="full-screen pa-0 ma-0">
       <v-row class="full-screen pa-0 ma-0">
-        <v-col cols="12" xs="12" sm="12" md="8">
-          
+        <v-col cols="12">
+          <p class="text-title text-sm-title pl-2 text-center font-weight-medium">Minhas Próximas Visitas</p> 
+        </v-col>
+        <v-col cols="12" xs="12" sm="12" md="8" class="pt-0 pb-0" >
+          <v-card
+            elevation="2"
+            v-for="visita in getVisitList" :key="visita.id"
+            class="pa-1 mb-2"
+            @click="openQRCODE(visita)"
+          >
+            <v-card-title class="pb-1">
+              <p class="text-subtitle-1 ma-0 font-weight-bold">Destino - {{visita.destino}}</p>
+            </v-card-title>
+            <v-card-text>
+              <span class="text-subtitle-2 ma-0">
+                Destino - {{visita.dt_visita}}
+              </span>
+              
+            </v-card-text>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
+    <VisitQRCode :visitaSelected="visitaSelected"/>
   </v-content>
 </template>
 
@@ -14,12 +33,12 @@
 
 import { mask } from 'vue-the-mask';
 import { mapGetters, mapActions } from 'vuex';
-import ForgotPassword from '@/views/authentication/ForgotPassword';
+import VisitQRCode from '../visit/VisitQRCode';
 
 export default {
   name: 'Login',
   components: {
-    UserPreRegistration,
+    VisitQRCode
   },
   directives: {
     mask,
@@ -37,44 +56,24 @@ export default {
       showAlert: false,
       isLoading: false,
       mensagemSucesso: '',
+      visitaSelected: {}
     };
   },
   computed: {
-    ...mapGetters('authentication', ['mode']),
+    ...mapGetters('authentication', ['mode','getVisitList']),
     ...mapGetters('main', ['authenticated']),
   },
   created() {
-    localStorage.setItem('token_visitas', null);
-    this.setAuthenticated(false);
-    this.loadModeNewPassword();
+    this.fetchVisitaList();
   },
   methods: {
-    ...mapActions('main', ['setAuthenticated']),
-    ...mapActions('authentication', ['setMode']),
-    loadModeNewPassword() {
-      if (this.$route.query.token) {
-        this.setMode(3);
-      }
-    },
-    singin(user) {
-      this.isLoading = true;
-      this.$http.post('/authenticate/operador', user).then(
-        (res) => {
-          this.isLoading = false;
-          localStorage.setItem('token_visitas', res.data.data.token);
-          localStorage.setItem(
-            'usuario_blood',
-            JSON.stringify(res.data.data.payload)
-          );
-          this.$router.push({ name: 'listarUnidade' }, {});
-          this.setAutenticado(true);
-        },
-        () => {
-          this.isLoading = false;
-          alert('Usuário ou senha inválidos!');
-        }
-      );
-    },
+    ...mapActions('authentication', ['fetchVisitaRegister', 'fetchVisitaList']),
+    ...mapActions('modal', ['openModalQrcode']),
+    
+    openQRCODE(visita){
+      this.visitaSelected = visita;
+      this.openModalQrcode();
+    }
   },
 };
 </script>

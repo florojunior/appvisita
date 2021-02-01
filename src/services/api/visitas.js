@@ -15,4 +15,17 @@ const createVisita = async (visita) => {
     }
   };
 
-export { getAllVisitas, createVisita };
+  const deleteVisita = async (visitaId) => {
+    try {
+      await httpClient.delete('/visitaexterna/'+visitaId);
+      return true;
+    } catch (error) {
+      if (error.response.status === 406) {
+        return false;
+      } else {
+        throw new Error(error);
+      }
+    }
+  };  
+
+export { getAllVisitas, createVisita, deleteVisita };

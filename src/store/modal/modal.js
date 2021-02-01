@@ -11,24 +11,10 @@ const state = {
     buttonText: '',
     show: false,
   },
-  modalAcceptUsers: {
-    title: '',
-    message: '',
-    buttonText: '',
+  modalQRCode:{
+    buttonText: 'Fechar',
     show: false,
   },
-  modalDeclineUsers: {
-    title: '',
-    message: '',
-    buttonText: '',
-    show: false,
-  },
-  modalBlockUser: {
-    show: true,
-  },
-  modalUnblockUser: {
-    show: true,
-  }
 };
 
 export const modal = {

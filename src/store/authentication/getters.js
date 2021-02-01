@@ -9,4 +9,5 @@ export const getters = {
   mode: (state) => state.mode,
   user: (state) => state.user,
   menu: (state) => state.menu,
+  getVisitList: (state) => state.listVisitas,
 };

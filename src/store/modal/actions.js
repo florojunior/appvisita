@@ -5,6 +5,17 @@ export const actions = {
   closeModal(state) {
     state.commit('CLOSE_MODAL');
   },
+  closeModalQrcode(state) {
+    state.commit('setModalQRCode', {
+      show: false
+    });
+  },
+  openModalQrcode(state) {
+    state.commit('setModalQRCode', {
+      show: true,
+      modalQRCode: 'Fechar'
+    });
+  },
   setModalAcceptUsers(state, payload) {
     state.commit('setModalAcceptUsers', payload);
   },
@@ -17,11 +28,10 @@ export const actions = {
   setModalUnblockUserModal(state, payload) {
     state.commit('setUnblockUserModal', payload);
   },
-  addHealthcare(state) {
-    return;
-  },
   editHealthcare(state, payload) {
     state.commit('setHealthcare', payload);
   },
-  deleteHealthcare(state, payload) {},
+  setModalQrcode(state, payload) {
+    state.commit('setModalQRCode', payload);
+  },
 };

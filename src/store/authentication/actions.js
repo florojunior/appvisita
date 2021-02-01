@@ -5,7 +5,8 @@ import {
 } from '@/services/api/user.js';
 import {
   getAllVisitas, 
-  createVisita
+  createVisita,
+  deleteVisita
 } from '@/services/api/visitas.js';
 
 import router from '@/router';
@@ -113,6 +114,56 @@ export const actions = {
           root: true,
         }
       );
+    } catch (error) {
+      state.dispatch(
+        'modal/showModal',
+        {
+          title: 'Erro ao processar a requisição!',
+          message: 'Se o problema persistir, favor contatar o suporte.',
+          buttonText: 'VOLTAR PARA LOGIN',
+        },
+        {
+          root: true,
+        }
+      );
+    }
+  },
+  async fetchVisitaDelete(state, visitaId) {
+    try {
+
+      await deleteVisita(visitaId);
+
+      state.dispatch(
+        'modal/showModal',
+        {
+          title: 'Cancelamento realizado',
+          message:
+            'Seu agendamento foi cancelado com sucesso',
+          buttonText: 'VOLTAR PARA LISTAGEM',
+        },
+        {
+          root: true,
+        }
+      );
+    } catch (error) {
+      state.dispatch(
+        'modal/showModal',
+        {
+          title: 'Erro ao processar a requisição!',
+          message: 'Se o problema persistir, favor contatar o suporte.',
+          buttonText: 'VOLTAR PARA LOGIN',
+        },
+        {
+          root: true,
+        }
+      );
+    }
+  },
+  async fetchVisitaList(state) {
+    try {
+
+      const result = await getAllVisitas();
+      state.commit('setListVisitas', result.data.data);
     } catch (error) {
       state.dispatch(
         'modal/showModal',

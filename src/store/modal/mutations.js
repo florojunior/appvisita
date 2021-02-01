@@ -34,4 +34,7 @@ export const mutations = {
       status: payload.ativo,
     };
   },
+  setModalQRCode(state, payload) {
+    state.modalQRCode = payload;
+  },
 };

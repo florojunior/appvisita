@@ -14,7 +14,22 @@ const state = {
   hospitalSelected: null,
   hospitalsUser: [],
   setUser: {},
-  menu: {},
+  menu: [
+    {
+      descricao: "Menu Principal",
+      menu: [
+        {
+          descricao: "Minhas Vistias",
+          path: "/listvisita"
+        },
+        {
+          descricao: "Registrar Visita",
+          path: "/formvisit"
+        }
+      ]
+    }
+  ],
+  listVisitas: [],
   // Modes:
   // 1 - ForgotPassword
   // 2 - (default) Authenticate
@@ -22,6 +37,7 @@ const state = {
   // 4 - VerifyUserRegistration
   // 5 - UserPreRegistration
   mode: 2,
+
 };
 
 export const authentication = {
