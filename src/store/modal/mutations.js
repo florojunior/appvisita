@@ -37,4 +37,7 @@ export const mutations = {
   setModalQRCode(state, payload) {
     state.modalQRCode = payload;
   },
+  setModalConfirmVisit(state, payload) {
+    state.modalConfirmVisit = payload;
+  },
 };

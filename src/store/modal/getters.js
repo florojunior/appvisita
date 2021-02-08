@@ -5,5 +5,6 @@ export const getters = {
   getModalAcceptUsers: (state) => state.modalAcceptUsers,
   getModalDeclineUsers: (state) => state.modalDeclineUsers,
   getHealthcare: (state) => state.healthcare,
-  getModalQRCode: (state) => state.modalQRCode
+  getModalQRCode: (state) => state.modalQRCode,
+  getModalConfirmVisit: (state) => state.modalConfirmVisit,
 };

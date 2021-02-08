@@ -16,6 +16,17 @@ export const actions = {
       modalQRCode: 'Fechar'
     });
   },
+  closeModalConfirmVisit(state) {
+    state.commit('setModalConfirmVisit', {
+      show: false
+    });
+  },
+  openModalQrcode(state) {
+    state.commit('setModalConfirmVisit', {
+      show: true,
+      buttonText: 'Fechar'
+    });
+  },
   setModalAcceptUsers(state, payload) {
     state.commit('setModalAcceptUsers', payload);
   },

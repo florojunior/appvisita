@@ -39,6 +39,14 @@ const router = new Router({
         ),
     },
     {
+      path: '/portalvisit',
+      name: 'portalVisit',
+      component: () =>
+        import(
+          /* webpackChunkName: "login" */ '@/views/visit/VisitPortal.vue'
+        ),
+    },
+    {
       path: '/login',
       name: 'login',
       component: () =>

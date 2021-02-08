@@ -15,6 +15,10 @@ const state = {
     buttonText: 'Fechar',
     show: false,
   },
+  modalConfirmVisit:{
+    buttonText: 'Fechar',
+    show: true,
+  },
 };
 
 export const modal = {
