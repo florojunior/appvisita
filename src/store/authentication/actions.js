@@ -6,7 +6,9 @@ import {
 import {
   getAllVisitas, 
   createVisita,
-  deleteVisita
+  deleteVisita,
+  getVisitaById,
+  updateVisita
 } from '@/services/api/visitas.js';
 
 import router from '@/router';
@@ -108,12 +110,63 @@ export const actions = {
           title: 'Cadastro realizado',
           message:
             'Seus dados foram submetidos e agora está pendente de aprovação pela gestão do hospital. \nAguarde e-mail de confirmação para ter acesso ao sistema.',
-          buttonText: 'VOLTAR PARA O LOGIN',
+          buttonText: 'FECHAR',
         },
         {
           root: true,
         }
       );
+    } catch (error) {
+      state.dispatch(
+        'modal/showModal',
+        {
+          title: 'Erro ao processar a requisição!',
+          message: 'Se o problema persistir, favor contatar o suporte.',
+          buttonText: 'VOLTAR PARA LOGIN',
+        },
+        {
+          root: true,
+        }
+      );
+    }
+  },
+  async fetchVisitaUpdate(state, data) {
+    try {
+      await updateVisita(data.id, data.status);
+
+      state.dispatch(
+        'modal/showModal',
+        {
+          title: 'Entrada aceita',
+          message:
+            'A visita foi aceita pelo operador. \nO Visitante está liberado.',
+          buttonText: 'FECHAR',
+        },
+        {
+          root: true,
+        }
+      );
+    } catch (error) {
+      state.dispatch(
+        'modal/showModal',
+        {
+          title: 'Erro ao processar a requisição!',
+          message: 'Se o problema persistir, favor contatar o suporte.',
+          buttonText: 'VOLTAR PARA LOGIN',
+        },
+        {
+          root: true,
+        }
+      );
+    }
+  },
+  async fetchVisitaFind(state, data) {
+    try {
+
+      const result = await getVisitaById(data);
+      console.log(result);
+      state.commit('setVisitaSelected', result.data.data[0]);
+
     } catch (error) {
       state.dispatch(
         'modal/showModal',
@@ -181,7 +234,9 @@ export const actions = {
   async authenticate(state, user) {
     try {
       const result = await authenticateUser(user);
-      localStorage.setItem('token_visitas', result.data.data.token);
+      localStorage.setItem('token_visitas', result.data.data.token.token);
+      localStorage.setItem('user_visitas', JSON.stringify(result.data.data.user));
+      return true;
       //router.push({ name: 'visitForm' }, {});
     } catch (error) {
       state.dispatch(

@@ -19,17 +19,18 @@ const state = {
       descricao: "Menu Principal",
       menu: [
         {
-          descricao: "Minhas Vistias",
+          descricao: "Agendamentos",
           path: "/listvisita"
         },
         {
-          descricao: "Registrar Visita",
+          descricao: "Registrar Agendamento",
           path: "/formvisit"
         }
       ]
     }
   ],
   listVisitas: [],
+  visitaSelected: {},
   // Modes:
   // 1 - ForgotPassword
   // 2 - (default) Authenticate

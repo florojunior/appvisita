@@ -17,7 +17,7 @@ const state = {
   },
   modalConfirmVisit:{
     buttonText: 'Fechar',
-    show: true,
+    show: false,
   },
 };
 

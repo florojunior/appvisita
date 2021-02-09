@@ -37,4 +37,7 @@ export const mutations = {
   setListVisitas(state, payload) {
     state.listVisitas = payload;
   },
+  setVisitaSelected(state, payload) {
+    state.visitaSelected = payload;
+  },
 };

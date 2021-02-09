@@ -75,6 +75,7 @@ export default {
       this.isLoading = true;
       this.$http.post('/authenticate/operador', user).then(
         (res) => {
+          console.log(res);
           this.isLoading = false;
           localStorage.setItem('token_visitas', res.data.data.token);
           this.$router.push({ name: 'visitForm' }, {});

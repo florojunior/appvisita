@@ -21,7 +21,7 @@ export const actions = {
       show: false
     });
   },
-  openModalQrcode(state) {
+  openModalConfirmVisit(state) {
     state.commit('setModalConfirmVisit', {
       show: true,
       buttonText: 'Fechar'

@@ -44,16 +44,15 @@
           class="onPrimaryHighEmphasis--text"
           @click.stop="drawer = !drawer"
         ></v-app-bar-nav-icon>
-
         <v-img
           v-if="desktopBreakpoint"
-          src="@/assets/images/logo-light.svg"
+          src="@/assets/images/tjam_logo.svg"
           max-width="90px"
           alt="Blood logo"
         ></v-img>
-        <v-toolbar-title v-else>
-          <span class="surface--text text-h6">
-            Visitas
+        <v-toolbar-title v-else class="ml-0 pl-0">
+          <span class="ml-0 pl-0 surface--text text-subtitle-1 text-uppercase font-weight-bold">
+            {{userData.nome}}
           </span>
         </v-toolbar-title>
 
@@ -62,12 +61,15 @@
         <v-tooltip>
           <template v-slot:activator="{ on }">
             <v-btn
-              icon
+              text
               color="onPrimaryHighEmphasis"
               @click="handleLogOut()"
               v-on="on"
+              class="mr-0 pr-0"
             >
-              <v-icon>mdi-keyboard-return</v-icon>
+               <span class="ml-0 pl-0 surface--text text-subtitle-2 text-uppercase mt-1 font-weight-bold">
+                  Sair
+                </span>
             </v-btn>
           </template>
           <span>Log out</span>
@@ -93,6 +95,9 @@ export default {
     desktopBreakpoint() {
       return this.$vuetify.breakpoint.smAndUp;
     },
+    userData(){
+      return JSON.parse(localStorage.getItem("user_visitas"));
+    }
   },
   created: function () {
     /*var usrAdm = true;
@@ -134,7 +139,6 @@ export default {
         }*/
   },
   methods: {
-    ...mapActions('authentication', ['handleLogOut']),
     ...mapActions('main', ['handleLogOut']),
   },
 };

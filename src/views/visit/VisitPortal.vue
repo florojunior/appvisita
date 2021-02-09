@@ -2,7 +2,7 @@
    <v-content>
        <v-container fill-height class="full-screen d-flex align-start justify-center">
         <h1 class="text-xl-h5 text-lg-h5">
-            Portal de Visitas {{showDecode}}
+            Portal de Visitas
         </h1>        
         <v-row>
             <v-col style="max-height: 500px">
@@ -15,8 +15,11 @@
 </template>
 
 <script>
+
 import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
 import ConfirmVisitModal from './ConfirmVisitModal'
+import { mapGetters, mapActions } from 'vuex';
+
 
 export default {
     data: function () {
@@ -31,6 +34,9 @@ export default {
         ConfirmVisitModal
     },
     methods:{
+        ...mapActions('authentication', ['fetchVisitaFind']),
+        ...mapActions('modal', ['openModalConfirmVisit']),
+        
         async onInit (promise) {
             try {
                 await promise
@@ -51,8 +57,13 @@ export default {
             }
             },
         onDecode(valor){
-            this.showDecode = false;
-            setTimeout(()=>{ this.showDecode = true; }, 1000);
+            console.log(valor);
+            if(valor){
+                this.fetchVisitaFind(valor);
+                this.openModalConfirmVisit(true);
+                this.showDecode = false;
+                setTimeout(()=>{ this.showDecode = true; }, 1000);
+            }
         }
     }
 }

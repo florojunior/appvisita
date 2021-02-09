@@ -37,6 +37,7 @@
             </v-toolbar-title>
 
             <div color="white" style="flex-grow:1" class="d-flex justify-end">
+                Sair
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
                         <v-btn icon color="white" @click="logout()" v-on="on">

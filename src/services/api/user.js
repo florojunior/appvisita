@@ -48,7 +48,6 @@ const unblockUserStatus = async (user) => {
 };
 
 const authenticateUser = async (user) => {
-  console.log(user);
   return httpClient.post(`/visitanteexterno/login`, user);
 };
 

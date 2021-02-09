@@ -26,6 +26,31 @@ const createVisita = async (visita) => {
         throw new Error(error);
       }
     }
-  };  
+  }; 
+  
+  const updateVisita = async (visitaId, status) => {
+    try {
+      await httpClient.put(`/visitaexterna/${visitaId}/${status}`);
+      return true;
+    } catch (error) {
+      if (error.response.status === 406) {
+        return false;
+      } else {
+        throw new Error(error);
+      }
+    }
+  }; 
 
-export { getAllVisitas, createVisita, deleteVisita };
+  const getVisitaById =  async (visitaId) => {
+    try {
+      return await httpClient.get('/visitaexterna/'+visitaId);
+    } catch (error) {
+      if (error.response.status === 406) {
+        return false;
+      } else {
+        throw new Error(error);
+      }
+    }
+  }; 
+
+export { getAllVisitas, createVisita, deleteVisita, getVisitaById, updateVisita};

@@ -3,7 +3,9 @@
     <v-row align="center" justify="center" no-gutters>
       <v-col cols="12" xs="10" sm="10" md="10" lg="8" xl="8">
         <v-row align="center" justify="center">
+          <v-col cols=12 class="d-flex justify-center">
           <Logo />
+          </v-col>
         </v-row>
         <v-card flat class="mt-16">
           <v-card-title class="text-h5 text-sm-h4">{{
@@ -27,6 +29,7 @@
               <v-text-field
                 v-model="password"
                 name="password"
+                dense
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="[passwordRules.required]"
                 :type="showPassword ? 'text' : 'password'"
@@ -144,12 +147,14 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           this.buttonLoading = true;
-          await this.authenticate({
+          const result = await this.authenticate({
             cpf: this.unmaskedCpf,
             senha: this.password,
           });
-          this.setAuthenticated(true);
-          router.push({ name: 'visitForm' }, {});
+          if(result){
+            this.setAuthenticated(true);
+            router.push({ name: 'visitForm' }, {});
+          }
         } catch (error) {
           this.showModal({
             title: this.modal.error.title,

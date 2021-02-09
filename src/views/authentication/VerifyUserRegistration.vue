@@ -163,7 +163,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.startButtonLoading();
         try {
-          await this.fetchPersonRegister( {user :{cpf: this.cpf, nome: this.name, email: this.email, senha: this.password}, foto: this.foto});
+          await this.fetchPersonRegister( {user :{cpf: this.unmaskedCpf, nome: this.name, email: this.email, senha: this.password}, foto: this.foto});
         } catch (error) {
         }
 

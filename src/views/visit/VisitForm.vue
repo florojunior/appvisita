@@ -1,62 +1,67 @@
 <template>
   <v-content>
     <v-container fill-height class="full-screen pa-0 ma-0">
-      <v-form id="form-new-password" ref="form">
-        <v-row class="full-screen pa-0 ma-0" v-if="step == 0">
-          <v-col cols="12">
-            <p class="text-title text-sm-title pl-2">Registrar Nova Visita</p> 
-          </v-col>
-          <v-col cols="12" class="pa-0 pl-4 pr-4">
-          <v-menu
-              ref="menuDatePicker"
-              v-model="menuDatePicker"
-              :close-on-content-click="false"
-              transition="scale-transition"
-              offset-y
-              max-width="290px"
-              min-width="290px" 
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-text-field
-                  v-model="dateFormatted"
-                  label="Dia da visita"
-                  outlined
-                  
-                  v-bind="attrs"
-                  @blur="date = parseDate(dateFormatted)"
-                  v-on="on"
+      <v-form id="form-new-password" ref="form" class="pa-4">
+        <v-card color="#fafafa">
+          <v-card-text>
+            <v-row class="full-screen pa-0 ma-0" v-if="step == 0">
+              <v-col cols="12">
+                <p class="text-title text-sm-title pl-2">Registrar Nova Visita</p> 
+              </v-col>
+              <v-col cols="12" class="pa-0 pl-4 pr-4">
+              <v-menu
+                  ref="menuDatePicker"
+                  v-model="menuDatePicker"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  max-width="290px"
+                  min-width="290px" 
                 >
-                <v-icon>mdi-calendar</v-icon>
-                </v-text-field>
-              </template>
-              <v-date-picker
-                v-model="date"
-                no-title
-                @input="menuDatePicker = false"
-              ></v-date-picker>
-            </v-menu>
-          </v-col>
-          <v-col class="pa-0 pl-4 pr-4">
-            <v-text-field
-              v-model="setor"
-              name="setor"
-              :rules="[setorRules.required]"
-              :label="`${formLabels.setor}`"
-              outlined
-            ></v-text-field>
-          </v-col>
-          <v-col cols="12" class="d-flex justify-end">
-            <v-btn
-                type="submit"
-                form="form-visit"
-                color="primary"
-                class="px-4 py-2 ml-2 text-button"
-                :loading="buttonLoading"
-                @click.prevent="submitForm()"
-                >{{ button.textStep1 }}</v-btn
-              >
-          </v-col>          
-        </v-row>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="dateFormatted"
+                      label="Dia da visita"
+                      outlined
+                      readonly
+                      v-bind="attrs"
+                      @blur="date = parseDate(dateFormatted)"
+                      v-on="on"
+                    >
+                    <v-icon>mdi-calendar</v-icon>
+                    </v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="date"
+                    no-title
+                    @input="menuDatePicker = false"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col class="pa-0 pl-4 pr-4">
+                <v-text-field
+                  v-model="setor"
+                  name="setor"
+                  :rules="[setorRules.required]"
+                  :label="`${formLabels.setor}`"
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" class="d-flex justify-end">
+                <v-btn
+                    style="width: 100%"
+                    type="submit"
+                    form="form-visit"
+                    color="primary"
+                    class="px-4 py-2 ml-2 text-button"
+                    :loading="buttonLoading"
+                    @click.prevent="submitForm()"
+                    >{{ button.textStep1 }}</v-btn
+                  >
+              </v-col>          
+            </v-row>
+          </v-card-text>
+        </v-card>
       </v-form>
     </v-container>
   </v-content>
@@ -66,6 +71,7 @@
 import { mask } from 'vue-the-mask';
 import { mapGetters, mapActions } from 'vuex';
 import { setorRules } from '@/validations';
+import router from '@/router';
 
 export default {
   name: 'VisitForm',
@@ -86,11 +92,11 @@ export default {
     menuDatePicker: false,
     buttonLoading: false,
     formLabels:{
-      setor: 'Setor'
+      setor: 'Setor Destino'
     },
     button:{
       back: 'Voltar',
-      textStep1: 'Enviar'
+      textStep1: 'Agendar'
     },
     step: 0 // 0 - Passo inicial, 1 - capturarFoto
   }),
@@ -114,16 +120,16 @@ export default {
       if (this.$refs.form.validate()) {
         try {
           this.buttonLoading = true;
-            this.startButtonLoading();
-            try {
-              await this.fetchVisitaRegister({
-                dt_visita: this.date,
-                destino: this.setor
-              });
-            } catch (error) {
-            }
-
-            this.stopButtonLoading();
+          this.startButtonLoading();
+          try {
+            await this.fetchVisitaRegister({
+              dt_visita: this.date,
+              destino: this.setor
+            });
+            router.push({ name: 'visitList' }, {});
+          } catch (error) {
+          }
+          this.stopButtonLoading();
         } catch (error) {
           this.showModal({
             title: this.modal.error.title,
