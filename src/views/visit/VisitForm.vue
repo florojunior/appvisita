@@ -24,6 +24,7 @@
                       label="Dia da visita"
                       outlined
                       readonly
+                      dense
                       v-bind="attrs"
                       @blur="date = parseDate(dateFormatted)"
                       v-on="on"
@@ -38,12 +39,34 @@
                   ></v-date-picker>
                 </v-menu>
               </v-col>
-              <v-col class="pa-0 pl-4 pr-4">
+              <v-col class="pa-0 pl-4 pr-4" cols=12>
+                <v-select
+                  :items="listDetino"
+                  item-text="name"
+                  dense
+                  v-model="unidade"
+                  item-value="id"
+                  :label="`${formLabels.unidade}`"
+                  outlined
+                ></v-select>
+              </v-col>
+              <v-col class="pa-0 pl-4 pr-4" cols=12>
                 <v-text-field
                   v-model="setor"
                   name="setor"
+                  dense
                   :rules="[setorRules.required]"
                   :label="`${formLabels.setor}`"
+                  outlined
+                ></v-text-field>
+              </v-col>
+              <v-col class="pa-0 pl-4 pr-4" cols=12>
+                <v-text-field
+                  v-model="processo"
+                  name="processov"
+                  dense
+                  :rules="[setorRules.required]"
+                  :label="`${formLabels.processo}`"
                   outlined
                 ></v-text-field>
               </v-col>
@@ -81,18 +104,32 @@ export default {
     mask,
   },
   data: vm => ({
+    listDetino:[
+      {
+        name: "Arnoldo Peres",
+        id: 1,
+      },{
+        name: "Anexo",
+        id: 2
+      }
+
+    ],
     setorRules,
     date: new Date().toISOString().substr(0, 10),
     dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
     menu1: false,
     menu2: false,
     setor: '',
+    processo: '',
+    unidade: null,
     isLoading: false,
     mensagemSucesso: '',
     menuDatePicker: false,
     buttonLoading: false,
     formLabels:{
-      setor: 'Setor Destino'
+      setor: 'Setor Destino',
+      unidade: 'Escolha uma unidade',
+      processo: 'Numero do Processo'
     },
     button:{
       back: 'Voltar',
@@ -124,7 +161,9 @@ export default {
           try {
             await this.fetchVisitaRegister({
               dt_visita: this.date,
-              destino: this.setor
+              destino: this.setor,
+              id_unidade: this.unidade,
+              num_processo: this.processo
             });
             router.push({ name: 'visitList' }, {});
           } catch (error) {

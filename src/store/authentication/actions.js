@@ -68,7 +68,7 @@ export const actions = {
 
       const formData = new FormData();
       
-      formData.set("visitanteExternaDto", JSON.stringify(data.user));
+      formData.set("visitanteDto", JSON.stringify(data.user));
       //formData.append("visitanteExternaDto", JSON.stringify(data.user));
       formData.append("file", data.foto);
       await createUser(formData);
@@ -86,18 +86,22 @@ export const actions = {
         }
       );
     } catch (error) {
-      state.dispatch(
-        'modal/showModal',
-        {
-          title: 'Erro ao processar a requisição!',
-          message: 'Se o problema persistir, favor contatar o suporte.',
-          buttonText: 'VOLTAR PARA LOGIN',
-        },
-        {
-          root: true,
-        }
-      );
+      console.log(error.response.data.statusCode);
+      if(error.response.data.statusCode == 400){
+        state.dispatch(
+          'modal/showModal',
+          {
+            title: 'Formulário submetido!',
+            message: 'Já existe um cadastro com o CPF informado.',
+            buttonText: 'VOLTAR PARA CADASTRO',
+          },
+          {
+            root: true,
+          }
+        );
+      }
     }
+      
   },
   async fetchVisitaRegister(state, data) {
     try {
@@ -117,6 +121,7 @@ export const actions = {
         }
       );
     } catch (error) {
+      console.log(error.response);
       state.dispatch(
         'modal/showModal',
         {

@@ -1,11 +1,11 @@
 import httpClient from '@/plugins/axios';
 
 const createUser = async (user) => {
-  return httpClient.post('/visitanteexterno/', user,{
-    headers: {
-    "Content-Type": `multipart/form-data; boundary=${user._boundary}`,
-    }
-  });
+    await httpClient.post('/visitante/', user,{
+      headers: {
+      "Content-Type": `multipart/form-data; boundary=${user._boundary}`,
+      }
+    });
 };
 
 const sendRecoverPasswordEmail = async (email) => {
@@ -48,7 +48,7 @@ const unblockUserStatus = async (user) => {
 };
 
 const authenticateUser = async (user) => {
-  return httpClient.post(`/visitanteexterno/login`, user);
+  return httpClient.post(`/visitante/login`, user);
 };
 
 export {

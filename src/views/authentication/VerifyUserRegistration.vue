@@ -5,7 +5,7 @@
         <v-row align="center" justify="center">
           <Logo />
         </v-row>
-        <v-card flat class="mt-16">
+        <v-card flat class="mt-8">
           <v-card-title class="text-h5 text-sm-h4">{{
             card.title
           }}</v-card-title>
@@ -15,53 +15,80 @@
           <v-spacer></v-spacer>
           <v-card-text class="pb-0">
             <v-form id="form-verify-user-register" ref="form">
-              <v-text-field
-                v-model="cpf"
-                v-mask="'###.###.###.##'"
-                outlined
-                dense
-                name="cpf"
-                :label="`${formLabels.cpf}`"
-                :rules="[cpfRules.required, cpfRules.validCpf]"
-              ></v-text-field>
-              <v-text-field
-                v-model="name"
-                outlined
-                dense
-                name="nome"
-                :rules="[nameRules.required]"
-                :label="`${formLabels.name}`"
-              ></v-text-field>
-              <v-text-field
-                  v-model="email"
-                  name="email"
-                  dense
-                  :rules="[emailRules.required, emailRules.validEmail]"
-                  :label="`${formLabels.email}`"
-                  outlined
-                ></v-text-field>
-                <template>
-                  <v-file-input
-                    dense
-                    append-icon="mdi-camera"
-                    :prepend-icon="null"
-                    v-model="foto"
+              <v-row class="pa-0 ma-0">
+                <v-col cols=12 class="pa-0 ma-0">
+                  <v-text-field
+                    v-model="name"
                     outlined
-                    accept="image/*"
-                    :label="`${formLabels.foto}`"
-                  ></v-file-input>
-                  {{foto}}
-                </template>
-                <v-text-field
-                  v-model="password"
-                  name="password"
-                  dense
-                  password
-                  type="password"
-                  :rules="[passwordRules.required, passwordRules.validEmail]"
-                  :label="`${formLabels.password}`"
-                  outlined
-                ></v-text-field>
+                    dense
+                    name="nome"
+                    :rules="[nameRules.required]"
+                    :label="`${formLabels.name}`"
+                  ></v-text-field>
+                </v-col>
+                <v-col class="pa-0 ma-0" cols=6>
+                  <v-text-field
+                    v-model="cpf"
+                    v-mask="'###.###.###.##'"
+                    outlined
+                    dense
+                    name="cpf"
+                    :label="`${formLabels.cpf}`"
+                    :rules="[cpfRules.required, cpfRules.validCpf]"
+                  ></v-text-field>
+                </v-col>
+                <v-col class="pa-0 ma-0 pl-2" cols=6>
+                  <v-text-field
+                    v-model="oab"
+                    outlined
+                    dense
+                    name="oab"
+                    :label="`${formLabels.oab}`"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols=12 class="pa-0 ma-0">
+                  <v-text-field
+                    v-model="email"
+                    name="email"
+                    dense
+                    :rules="[emailRules.required, emailRules.validEmail]"
+                    :label="`${formLabels.email}`"
+                    outlined
+                  ></v-text-field>
+                </v-col>
+                <v-col cols=6 class="pa-0 ma-0">
+                  <v-text-field
+                    v-model="rg"
+                    outlined
+                    dense
+                    name="rg"
+                    :label="`${formLabels.rg}`"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols=6 class="pa-0 ma-0 pl-2">
+                  <template>
+                    <v-file-input
+                      dense
+                      append-icon="mdi-camera"
+                      :prepend-icon="null"
+                      v-model="foto"
+                      outlined
+                      accept="image/*"
+                      :label="`${formLabels.foto}`"
+                    ></v-file-input>
+                  </template>
+                </v-col>
+                  <v-text-field
+                    v-model="password"
+                    name="password"
+                    dense
+                    password
+                    type="password"
+                    :rules="[passwordRules.required, passwordRules.validEmail]"
+                    :label="`${formLabels.password}`"
+                    outlined
+                  ></v-text-field>
+                </v-row>
             </v-form>
           </v-card-text>
           <v-card-actions class="d-flex justify-center pl-4 pr-4">
@@ -127,7 +154,9 @@ export default {
         name: 'Nome',
         email: 'Email',
         password: 'Senha',
-        foto: 'Foto'
+        foto: 'Escolha uma foto',
+        rg: "RG",
+        oab: "OAB"
       },
       button: {
         text: 'Continuar',
@@ -152,6 +181,15 @@ export default {
     unmaskedCpf() {
       return unmaskText(this.cpf);
     },
+    userJSON(){
+      return {
+        cpf: this.unmaskedCpf,
+        rg: this.rg,
+        oab: this.oab,
+        nome: this.name, 
+        email: this.email, 
+        senha: this.password}
+    }
   },
   methods: {
     ...mapActions('authentication', [
@@ -159,14 +197,12 @@ export default {
       'fetchPersonRegister',
     ]),
     async submitForm() {
-      console.log(this.$refs.form.validate());
       if (this.$refs.form.validate()) {
         this.startButtonLoading();
         try {
-          await this.fetchPersonRegister( {user :{cpf: this.unmaskedCpf, nome: this.name, email: this.email, senha: this.password}, foto: this.foto});
+          await this.fetchPersonRegister( {user :this.userJSON, foto: this.foto});
         } catch (error) {
         }
-
         this.stopButtonLoading();
       }
     },

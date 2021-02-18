@@ -1,44 +1,77 @@
 <template>
   <v-content>
-    <v-container fill-height class="full-screen pa-0 ma-0 d-flex justify-center">
-      <p v-if="getVisitList.length > 0" class="text-title text-sm-title font-weight-medium pa-4 text-center">Agendamentos Pendentes</p> 
-      <v-row class="full-screen pa-2 ma-0">
-        
-        <v-col cols="12" xs="12" sm="12" md="8" class="pt-0 pb-0" v-if="getVisitList.length > 0" >
-          <v-card
-            elevation="2"
-            v-for="visita in getVisitList" :key="visita.id"
-            class="pa-1 mb-2"
-            @click="openQRCODE(visita)"
-          >
-            <v-card-title class="pb-1">
-              <p class="text-subtitle-1 ma-0 font-weight-bold">Destino - {{visita.destino}}</p>
-            </v-card-title>
-            <v-card-text>
-              <span class="text-subtitle-2 ma-0">
-                Data de Visita - {{reformatDate(visita.dt_visita)}}
-              </span>
-              
-            </v-card-text>
-          </v-card>
-        </v-col>
-        <v-col cols="12" xs="12" sm="12" md="8"  style="margin-top: 50%" class="pt-0 pb-0" v-if="getVisitList.length == 0" >
-          <p class="text-subtitle-2 ma-0 text-center">
-            Não existem visitas agendadas
-          </p>
-           <v-card
-            elevation="2"
-            class="pa-1 mb-2 mt-10"
-            @click="newVisitaOpen()"
-          >
-            <v-card-text>
-              <p class="text-subtitle-2 ma-0 text-center">
-                Agendar nova visita 
-              </p>  
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+    <v-container fill-height class="full-screen pa-0 ma-0 d-flex justify-start align-start">
+    <v-tabs
+        v-model="tab"
+        background-color="primary"
+        centered
+        dark
+        icons-and-text
+        dense
+      >
+      <v-tab href="#tab-1">
+          Histórico
+          <v-icon>mdi-phone</v-icon>
+        </v-tab>
+
+        <v-tab href="#tab-2">
+          Pendentes
+          <v-icon>mdi-heart</v-icon>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items v-model="tab" style="width: 100%; height: 100%">
+        <v-tab-item
+          :value="'tab-' + 1"
+          style="width: 100%; height: 100%">
+          <v-container>
+            <v-card flat>
+              <v-card-text>
+                <v-card
+                  elevation="2"
+                  v-for="visita in getVisitList" :key="visita.id"
+                  class="pa-1 mb-2"
+                  @click="openQRCODE(visita)"
+                >
+                  <v-card-title class="pb-1">
+                    <p class="text-subtitle-1 ma-0 font-weight-bold">Destino - {{visita.destino}}</p>
+                  </v-card-title>
+                  <v-card-text>
+                    <span class="text-subtitle-2 ma-0">
+                      Data de Visita - {{reformatDate(visita.dt_visita)}}
+                    </span>
+                  </v-card-text>
+                </v-card>
+              </v-card-text>
+            </v-card>
+          </v-container>
+        </v-tab-item>
+        <v-tab-item
+          :value="'tab-' + 2">
+         <v-container>
+            <v-card flat>
+              <v-card-text>
+                <v-card
+                  elevation="2"
+                  v-for="visita in getVisitList" :key="visita.id"
+                  class="pa-1 mb-2"
+                  @click="openQRCODE(visita)"
+                >
+                  <v-card-title class="pb-1">
+                    <p class="text-subtitle-1 ma-0 font-weight-bold">Destino - {{visita.destino}}</p>
+                  </v-card-title>
+                  <v-card-text>
+                    <span class="text-subtitle-2 ma-0">
+                      Data de Visita - {{reformatDate(visita.dt_visita)}}
+                    </span>
+                  </v-card-text>
+                </v-card>
+              </v-card-text>
+            </v-card>
+          </v-container>
+        </v-tab-item>
+      </v-tabs-items>
+    
     </v-container>
     <VisitQRCode :visitaSelected="visitaSelected"/>
   </v-content>
@@ -61,6 +94,7 @@ export default {
   },
   data: function () {
     return {
+      tab: null,
       shoSignup: false,
       usuario: {},
       lembrar: true,
