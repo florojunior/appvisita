@@ -11,6 +11,7 @@ export const actions = {
     state.commit('setAuthenticated', authenticated);
   },
   handleLogOut(state) {
+    console.log('logout');
     localStorage.setItem('token_visitas', null);
     state.commit('setAuthenticated', false);
     router.push({ name: 'login' }, {});

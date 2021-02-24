@@ -14,8 +14,12 @@
         </v-card-title>
 
       <v-card-text class="text-body-2 d-flex flex-column align-center justify-center mt-4 pb-0">
-        <div class="pb-4"><span class="text-subtitle-1 font-weight-medium pb-4">{{userValue.nome}}</span></div>
-        <div><v-img max-height="150" max-width="150" :src="url+userValue.photoPath"></v-img> </div>
+        <div class="pb-4">
+          <span class="text-subtitle-1 font-weight-medium pb-4">
+            {{userValue.nome}}
+          </span>
+        </div>
+        <div><v-img max-height="150" max-width="150" :src="url+userValue.foto"></v-img> </div>
         <VueQrcode :value="qrcodeValue" :width="widthQRCode"/>
       </v-card-text>
 

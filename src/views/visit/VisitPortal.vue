@@ -16,9 +16,9 @@
 
 <script>
 
-import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
+import { QrcodeStream } from 'vue-qrcode-reader'
 import ConfirmVisitModal from './ConfirmVisitModal'
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 
 export default {
@@ -29,8 +29,6 @@ export default {
     },
     components: {
         QrcodeStream,
-        QrcodeDropZone,
-        QrcodeCapture,
         ConfirmVisitModal
     },
     methods:{

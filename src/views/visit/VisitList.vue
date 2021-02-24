@@ -10,13 +10,13 @@
         dense
       >
       <v-tab href="#tab-1">
-          Histórico
-          <v-icon>mdi-phone</v-icon>
+          Atual
+          <v-icon>task_alt</v-icon>
         </v-tab>
 
         <v-tab href="#tab-2">
-          Pendentes
-          <v-icon>mdi-heart</v-icon>
+          Histórico
+          <v-icon>history_toggle_off</v-icon>
         </v-tab>
       </v-tabs>
 
@@ -25,16 +25,21 @@
           :value="'tab-' + 1"
           style="width: 100%; height: 100%">
           <v-container>
+
             <v-card flat>
               <v-card-text>
                 <v-card
                   elevation="2"
-                  v-for="visita in getVisitList" :key="visita.id"
+                  v-for="visita in getPendingList" :key="visita.id"
                   class="pa-1 mb-2"
+                  :color="(visita.dt_hora_entrada != null ? 'red': '')"
                   @click="openQRCODE(visita)"
                 >
-                  <v-card-title class="pb-1">
+                  <v-card-title class="pb-1 d-flex justify-space-between">
                     <p class="text-subtitle-1 ma-0 font-weight-bold">Destino - {{visita.destino}}</p>
+                    <v-icon color="black">
+                        open_with
+                    </v-icon>
                   </v-card-title>
                   <v-card-text>
                     <span class="text-subtitle-2 ma-0">
@@ -53,16 +58,20 @@
               <v-card-text>
                 <v-card
                   elevation="2"
-                  v-for="visita in getVisitList" :key="visita.id"
+                  v-for="visita in getHistoricList" :key="visita.id"
                   class="pa-1 mb-2"
                   @click="openQRCODE(visita)"
+                  
                 >
                   <v-card-title class="pb-1">
                     <p class="text-subtitle-1 ma-0 font-weight-bold">Destino - {{visita.destino}}</p>
                   </v-card-title>
-                  <v-card-text>
+                  <v-card-text class="d-flex flex-column">
                     <span class="text-subtitle-2 ma-0">
-                      Data de Visita - {{reformatDate(visita.dt_visita)}}
+                      Data de Entrada - {{reformatDate(visita.dt_visita)}}
+                    </span>
+                    <span class="text-subtitle-2 ma-0">
+                      Data de Saida - {{reformatDate(visita.dt_visita)}}
                     </span>
                   </v-card-text>
                 </v-card>
@@ -112,6 +121,16 @@ export default {
   computed: {
     ...mapGetters('authentication', ['mode','getVisitList']),
     ...mapGetters('main', ['authenticated']),
+    getPendingList(){
+      return this.getVisitList.filter((element)=>{
+        return element.dt_hora_saida == null;
+      })
+    },
+    getHistoricList(){
+      return this.getVisitList.filter((element)=>{
+        return element.dt_hora_saida != null;
+      })
+    }
   },
   created() {
     this.fetchVisitaList();
